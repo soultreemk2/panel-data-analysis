@@ -1,0 +1,112 @@
+<목표: 산재근로자의 "사회적 관계" 가 "생활만족"에 미치는 영향 - 종단연구>
+
+- 시간의 흐름에 따른 산재근로자의 삶의 만족도와 사회관계의 변화 경향성 파악
+- 산재근로자의 "삶의 만족도 변화"에 "사회관계"가 종단적으로 어떤 영향을 미치는지?  
+- 시계열로 구성된 자료임 !!!!
+
+- "사회적관계" 대신에 다른 요인 넣어서 돌려보기 !!
+
+
+
+
+** 시계열데이터
+
+삶의 만족도는 시간의 흐름에 따라 감소하는 trend가 있으므로 안정적인 데이터가 아님
+
+=> 앞으로의 삶의만족도를 예측 할 수 있음,,
+
+
+http://www.dodomira.com/2016/04/21/arima_in_r/
+
+
+
+=======비모수검정================
+ 똑같은 대상에게 7가지 질문을 했으니까 각 질문에 대한 응답값은 대응표본임(paired sample)
+ + 반응값이 수치형 + 데이터가 3개 이상 
+
+ ==> 모수적 방법은 분산분석, 비모수적 방법은 프리드만검정(정규분포를 따르지 않음)
+
+
+
+# 변수명
+
+
+Gb**001001	현재 전반적인 건강상태
+	
+Gb**006006	산재가 오늘날 삶에 영향을 미치는 정도
+	
+Gb**004001	일상생활에서 가족이나 타인은 도움 필요 정도
+Gb**005001	일상생활 수행의 어려움-배우기, 기억하기 집중하기
+Gb**005002	일상생활 수행의 어려움-옷입기, 목욕하기 등 집안을 돌아다니는 일
+Gb**005003	일상생활 수행의 어려움-쇼핑하기, 병원가기 등 집밖을 돌아다니는 일
+Gb**005004	일상생활 수행의 어려움-직업활동
+
+
+
+
+
+# 데이터추출
+
+data <- read_excel(path = "C:/Users/WRC/Desktop/한국복지패널조사/산재보험패널조사/분석2 대상.xlsx")
+
+data_13 <- subset(data, select = c(Gb01001001,Gb01006006,Gb01004001,
+                                   Gb01005001,Gb01005002,Gb01005003,Gb01005004))
+data_14 <- subset(data, select = c(Gb02001001,Gb02006006,Gb02004001,
+                                   Gb02005001,Gb02005002,Gb02005003,Gb02005004))
+data_15 <- subset(data, select = c(Gb03001001,Gb03006006,Gb03004001,
+                                   Gb03005001,Gb03005002,Gb03005003,Gb03005004))
+data_16 <- subset(data, select = c(Gb04001001,Gb04006006,Gb04004001,
+                                   Gb04005001,Gb04005002,Gb04005003,Gb04005004))
+data_17 <- subset(data, select = c(Gb05001001,Gb05006006,Gb05004001,
+                                   Gb05005001,Gb05005002,Gb05005003,Gb05005004))
+
+# 하나의 질문에 대한 1~5차년도 응답값
+y1 <- subset(data, select = c(Gb01001001,Gb02001001,Gb03001001,Gb04001001,Gb05001001))
+y2 <- subset(data, select = c(Gb01006006,Gb02006006,Gb03006006,Gb04006006,Gb05006006))
+y3 <- subset(data, select = c(Gb01004001,Gb02004001,Gb03004001,Gb04004001,Gb05004001))
+y4 <- subset(data, select = c(Gb01005001,Gb02005001,Gb03005001,Gb04005001,Gb05005001))
+y5 <- subset(data, select = c(Gb01005002,Gb02005002,Gb03005002,Gb04005002,Gb05005002))
+y6 <- subset(data, select = c(Gb01005003,Gb02005003,Gb03005003,Gb04005003,Gb05005003))
+y7 <- subset(data, select = c(Gb01005004,Gb02005004,Gb03005004,Gb04005004,Gb05005004))
+
+y1 <- as.matrix(y1)
+y2 <- as.matrix(y2)
+y3 <- as.matrix(y3)
+y4 <- as.matrix(y4)
+y5 <- as.matrix(y5)
+y6 <- as.matrix(y6)
+y7 <- as.matrix(y7)
+
+
+
+# 정규성검정
+
+
+
+
+
+
+
+
+
+
+
+# 비모수적방법 - 프리드만검정
+
+friedman.test(y1)
+friedman.test(y2)
+friedman.test(y3)
+friedman.test(y4)
+friedman.test(y5)
+friedman.test(y6)
+friedman.test(y7)
+
+
+cbind(mean(y1[,1]), mean(y1[,2]), mean(y1[,3]), mean(y1[,4]), mean(y1[,5]))
+cbind(mean(y2[,1]), mean(y2[,2]), mean(y2[,3]), mean(y2[,4]), mean(y2[,5]))
+cbind(mean(y3[,1]), mean(y3[,2]), mean(y3[,3]), mean(y3[,4]), mean(y3[,5]))
+cbind(mean(y4[,1]), mean(y4[,2]), mean(y4[,3]), mean(y4[,4]), mean(y4[,5]))
+cbind(mean(y5[,1]), mean(y5[,2]), mean(y5[,3]), mean(y5[,4]), mean(y5[,5]))
+cbind(mean(y6[,1]), mean(y6[,2]), mean(y6[,3]), mean(y6[,4]), mean(y6[,5]))
+cbind(mean(y7[,1]), mean(y7[,2]), mean(y7[,3]), mean(y7[,4]), mean(y7[,5]))
+
